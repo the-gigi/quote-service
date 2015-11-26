@@ -1,14 +1,18 @@
-import hug
-# import redis
+import os
 
-quotes = []
+import hug
+import redis
+
+redis_host = os.environ.get('REDIS_HOST', 'localhost')
+redis_server = redis.StrictRedis(host=redis_host, port=6379, db=0)
+
 
 @hug.get('/quotes')
 def get_all_quotes():
-    return quotes
+    return redis_server.lrange('quotes', 0, -1)
 
 
 @hug.post('/quotes')
 def add_quote(quote):
-    quotes.append(quote)
-    return quote
+    redis_server.lpush('quotes', quote)
+
