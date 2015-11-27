@@ -3,7 +3,7 @@ import os
 import hug
 import redis
 
-redis_host = os.environ.get('REDIS_HOST', 'localhost')
+redis_host = os.environ.get('QUOTE_STORE_SERVICE_HOST', 'localhost')
 redis_server = redis.StrictRedis(host=redis_host, port=6379, db=0)
 
 

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quote-store
+  labels:
+    app: quote-api
+    role: persistent-storage
+spec:
+  containers:
+  - name: redis
+    image: redis
+    volumeMounts:
+    - name: quote-store-volume
+      mountPath: /data/redis
+  volumes:
+  - name: quote-store-volume
+    emptyDir: {}
