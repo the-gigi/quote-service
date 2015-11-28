@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: quote-frontend
 spec:
+  type: NodePort
   ports:
   - port: 8000 # the port that this service should serve on
     # the container on each pod to connect to, can be a name

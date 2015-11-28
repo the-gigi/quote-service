@@ -1,7 +1,8 @@
 apiVersion: v1
 kind: ReplicationController
+
 metadata:
-  name: quote-frontend-controller
+  name: quote-frontend
 spec:
   replicas: 2
   # selector identifies the set of Pods that this
@@ -20,8 +21,11 @@ spec:
         role: frontend
     spec:
       containers:
-      - name: nginx
-        image: nginx
+      - name: quote-service
+        image: g1g1/quote-service
+        env:
+        - name: GET_HOSTS_FROM
+          # value: dns
+          value: env
         ports:
-        - containerPort: 80
-
+        - containerPort: 8000
