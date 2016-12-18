@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package quotes;
+
+// The quote service definition.
+service Quoter {
+  // Request a quoteSends a greeting
+  rpc GetQuote (QuoteRequest) returns (QuoteReply) {}
+}
+
+// The request message containing the author's name.
+message QuoteRequest {
+  string author = 1;
+}
+
+// The response message containing the greetings
+message QuoteReply {
+  string quote = 1;
+  string author = 2;
+}
