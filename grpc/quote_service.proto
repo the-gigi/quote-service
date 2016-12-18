@@ -4,7 +4,7 @@ package quotes;
 
 // The quote service definition.
 service Quoter {
-  // Request a quoteSends a greeting
+  // Request a quote
   rpc GetQuote (QuoteRequest) returns (QuoteReply) {}
 }
 
