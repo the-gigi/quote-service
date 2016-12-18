@@ -13,7 +13,7 @@ message QuoteRequest {
   string author = 1;
 }
 
-// The response message containing the greetings
+// The response message containing the quote and author
 message QuoteReply {
   string quote = 1;
   string author = 2;
