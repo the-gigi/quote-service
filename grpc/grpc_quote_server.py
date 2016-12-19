@@ -40,7 +40,7 @@ class Quoter(QuoterServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     add_QuoterServicer_to_server(Quoter(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('[::]:5050')
     server.start()
     print('Started...')
     try:

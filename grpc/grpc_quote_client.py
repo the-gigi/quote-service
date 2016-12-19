@@ -7,7 +7,7 @@ from quote_service_pb2 import (QuoteRequest, QuoterStub)
 
 
 def main():
-  channel = grpc.insecure_channel('localhost:50051')
+  channel = grpc.insecure_channel('localhost:5050')
   stub = QuoterStub(channel)
 
   for i in range(3):
