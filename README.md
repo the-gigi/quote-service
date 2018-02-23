@@ -8,6 +8,8 @@ It supports the following operations:
 
 The quotes are stored in redis
 
+The code here accompanies this article: [Introduction to Docker and Kubernetes](https://code.tutsplus.com/articles/introduction-to-docker-and-kubernetes--cms-25406)
+
 
 # Usage via [cURL](http://curl.haxx.se/)
 
