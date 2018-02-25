@@ -9,6 +9,7 @@ name = "pypi"
 
 hug = "*"
 redis = "*"
+hug-middleware-cors = "*"
 
 
 [dev-packages]
