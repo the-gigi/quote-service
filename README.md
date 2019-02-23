@@ -11,8 +11,11 @@ The quotes are stored in redis
 The code here accompanies this article: [Introduction to Docker and Kubernetes](https://code.tutsplus.com/articles/introduction-to-docker-and-kubernetes--cms-25406)
 
 
+# Running the server locally via docker-compose
 
-# Running the server locally
+`docker-compose up`
+
+# Running the server locally the hard way
 
 ## Create the virtual environment
 
@@ -29,6 +32,7 @@ see https://docs.docker.com/install/
 ## Launch the quote service
 
 `pipenv shell hug -f app.py`
+
 
 # Usage via [cURL](http://curl.haxx.se/)
 
