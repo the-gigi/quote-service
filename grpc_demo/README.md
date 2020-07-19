@@ -4,4 +4,6 @@ The code in this directory accompanies this article: [High-Performance Services 
 
 # Generate protobuf stubs
 
-     python -m grpc.tools.protoc -I./ --python_out=. --grpc_python_out=. quote_service.proto
+```
+python -m grpc.tools.protoc -I./ --python_out=. --grpc_python_out=. quote_service.proto
+```
