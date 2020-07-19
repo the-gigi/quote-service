@@ -10,9 +10,9 @@ from pathlib import Path
 
 sys.path.insert(0, '')
 
-from quote_service_pb2 import (QuoterServicer,
-                               QuoteReply,
-                               add_QuoterServicer_to_server)
+from quote_service_pb2 import QuoteReply
+from quote_service_pb2_grpc import (add_QuoterServicer_to_server,
+                                    QuoterServicer)
 
 script_dir = Path(__file__).parent
 lines = open(str(script_dir / '../quotes.txt')).read().split('\n')
@@ -24,7 +24,7 @@ for line in (x for x in lines if x):
 all_authors = tuple(quotes.keys())
 
 
-class Quoter(QuoterServicer):
+class QuoteService(QuoterServicer):
     def GetQuote(self, request, context):
         # Choose random author if it requested author doesn't has quotes
         if request.author in all_authors:
@@ -39,7 +39,7 @@ class Quoter(QuoterServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    add_QuoterServicer_to_server(Quoter(), server)
+    add_QuoterServicer_to_server(QuoteService(), server)
     server.add_insecure_port('[::]:5050')
     server.start()
     print('Started...')
