@@ -1,3 +1,0 @@
-hug
-redis
-hug-middleware-cors

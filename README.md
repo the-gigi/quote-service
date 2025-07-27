@@ -1,56 +1,153 @@
 # quote-service
-A simple web service that manages quotes.
 
-It supports the following operations:
+A modern web service that manages quotes built with FastAPI and Python 3.13.
+
+## Features
 
 - Add quote
-- Get all quotes
+- Get all quotes  
+- Health check endpoint
+- Async/await support
+- OpenAPI documentation
+- Modern Python packaging
 
-The quotes are stored in redis
+Quotes are stored in Redis with persistent storage.
 
-The code here accompanies this article: [Introduction to Docker and Kubernetes](https://code.tutsplus.com/articles/introduction-to-docker-and-kubernetes--cms-25406)
+> **Note**: The original [v1 code](https://github.com/the-gigi/quote-service/tree/v1.0.0) was used for the article [Introduction to Docker and Kubernetes](https://code.tutsplus.com/articles/introduction-to-docker-and-kubernetes--cms-25406). This v2 represents a complete modernization of that codebase.
 
+## Quick Start
 
-# Running the server locally via docker-compose
+### Running with KinD (Kubernetes in Docker) - Recommended
 
-`docker-compose up`
+```bash
+# Setup everything automatically
+./scripts/setup-kind.sh
 
-# Running the server locally the hard way
+# Access the service
+kubectl port-forward svc/quote-frontend 8000:8000
+```
 
-## Create the virtual environment
+### Running Locally with Development Environment
 
-`pipenv install`
+1. **Install Python 3.13 and uv** (required)
+   ```bash
+   # Install uv if not present
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
 
-## Install docker
+2. **Create virtual environment and install dependencies:**
+   ```bash
+   uv sync
+   ```
 
-see https://docs.docker.com/install/
+3. **Start Redis:**
+   ```bash
+   docker run -p 6379:6379 redis:7.4-alpine
+   ```
 
-## Launch Redis locally
+4. **Launch the quote service:**
+   ```bash
+   uv run uvicorn app:app --reload
+   ```
 
-`docker run -p 6379:6379 redis`
+## API Documentation
 
-## Launch the quote service
+Once running, visit:
+- API docs: http://localhost:8000/docs
+- Alternative docs: http://localhost:8000/redoc
 
-`pipenv shell hug -f app.py`
+## API Usage
 
+### Health Check
+```bash
+curl http://localhost:8000/health
+```
 
-# Usage via [cURL](http://curl.haxx.se/)
+### Get All Quotes
+```bash
+curl http://localhost:8000/quotes
+```
 
-Get all quotes:
+### Add a Quote
+```bash
+curl -X POST http://localhost:8000/quotes \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "quote=We must be very careful when we give advice to younger people: sometimes they follow it! ~ Edsger W. Dijkstra"
+```
 
-    curl http://localhost:8000/quotes
-     
-Add a quote:
+### Using httpie
+```bash
+# Get quotes
+http GET localhost:8000/quotes
 
-    curl http://localhost:8000/quotes -d "quote=We must be very careful when we give advice to younger people: sometimes they follow it! ~ Edsger W. Dijkstra"
+# Add quote  
+http --form POST localhost:8000/quotes quote="Your quote here"
+```
 
-# Usage via [httpie](https://github.com/jkbrzt/httpie) 
+## Kubernetes Deployment
 
-Get all quotes:
+### Using KinD (Development)
+```bash
+# Automated setup
+./scripts/setup-kind.sh
 
-    http http://localhost:8000/quotes
-     
-Add a quote:
+# Cleanup when done
+./scripts/cleanup-kind.sh
+```
 
-    http --form http://localhost:8000/quotes quote="We must be very careful when we give advice to younger people: sometimes they follow it! ~ Edsger W. Dijkstra"
+### Manual Kubernetes Deployment
+```bash
+kubectl apply -f statefulset-quote-store.yaml
+kubectl apply -f srv-quote-store.yaml
+kubectl apply -f deployment-quote-frontend.yaml  
+kubectl apply -f srv-quote-frontend.yaml
+```
+
+## End-to-End Testing
+
+To run a complete end-to-end test that validates the entire system:
+
+```bash
+./scripts/e2e-test.sh
+```
+
+This script will:
+- Clean up any existing KinD cluster
+- Deploy a fresh cluster with all components
+- Test all API endpoints (health, CRUD operations)
+- Verify data persistence through pod restarts
+- Run performance tests
+- Provide detailed progress and status information
+
+## Development Commands
+
+```bash
+# Install dependencies
+uv sync
+
+# Run tests
+uv run pytest
+
+# Format code
+uv run ruff format
+
+# Lint code
+uv run ruff check
+
+# Type check
+uv run mypy app.py
+```
+
+## What's New in v2
+
+- **FastAPI**: Modern async web framework with automatic OpenAPI docs
+- **Python 3.13**: Latest Python version with improved performance
+- **uv**: Ultra-fast Python package manager replacing Pipenv
+- **KinD**: Kubernetes-in-Docker for local development and testing
+- **Kubernetes**: Updated from ReplicationControllers to Deployments/StatefulSets
+- **Redis 7.4**: Latest Redis with improved security and performance
+- **Health Checks**: Proper liveness and readiness probes
+- **Security**: Non-root containers, resource limits, security contexts
+- **Persistent Storage**: Proper PVC for Redis data persistence
+- **Automated Setup**: One-command deployment with dependency installation
 

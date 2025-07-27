@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: quote-frontend
+  labels:
+    app: quote-api
+    role: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: quote-api
+      role: frontend
+  template:
+    metadata:
+      labels:
+        app: quote-api
+        role: frontend
+    spec:
+      containers:
+      - name: quote-service
+        image: g1g1/quote-service:latest
+        imagePullPolicy: Never
+        env:
+        - name: GET_HOSTS_FROM
+          value: env
+        - name: QUOTE_STORE_SERVICE_HOST
+          value: quote-store
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /quotes
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /quotes
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000

@@ -9,11 +9,7 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 WORKDIR /app
 
 # Install dependencies dynamically from pyproject.toml
-RUN pip install --no-cache-dir "fastapi>=0.104.0" \
-    "uvicorn[standard]>=0.24.0" \
-    "redis>=5.0.0" \
-    "pydantic>=2.5.0" \
-    "python-multipart>=0.0.6"
+RUN pip install --no-cache-dir {{DEPENDENCIES}}
 
 # Copy application code
 COPY app.py .
